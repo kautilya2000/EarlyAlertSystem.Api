@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  ksuId            String         @id
+  firstName        String
+  lastName         String
+  email            String         @unique
+  phoneNumber      String         @unique
+  homeDepartment   String
+  major            String?
+  gpa              String?
+  cohort           String?
+  academicStanding String?
+  Grade            Grade[]
+  SupportEvent     SupportEvent[]
+  Alert            Alert[]
+}
+
+model Instructor {
+  instructorId String   @id
+  name         String
+  email        String   @unique
+  Course       Course[]
+}
+
+model Course {
+  courseId          String     @id
+  courseName        String
+  courseNumber      Int
+  courseSubjectCode String     @unique
+  creditHours       Int
+  instructor        Instructor @relation(fields: [instructorId], references: [instructorId])
+  instructorId      String
+  Grade             Grade[]
+  Alert             Alert[]
+}
+
+model Grade {
+  gradeId           Int     @id @default(autoincrement())
+  gradeValue        String
+  student           Student @relation(fields: [ksuId], references: [ksuId])
+  ksuId             String
+  course            Course  @relation(fields: [courseId], references: [courseId])
+  courseId          String
+  semesterCode      String
+  crn               String
+  instructionMethod String
+  repeatIndicator   String
+}
+
+model Support {
+  supportId    Int            @id @default(autoincrement())
+  unit         String
+  type         String
+  SupportEvent SupportEvent[]
+  Alert        Alert[]
+}
+
+model SupportEvent {
+  eventId   Int      @id @default(autoincrement())
+  support   Support  @relation(fields: [supportId], references: [supportId])
+  supportId Int
+  student   Student  @relation(fields: [ksuId], references: [ksuId])
+  ksuId     String
+  date      DateTime
+  type      String
+}
+
+model Alert {
+  alertId          Int     @id @default(autoincrement())
+  student          Student @relation(fields: [ksuId], references: [ksuId])
+  ksuId            String
+  course           Course  @relation(fields: [courseId], references: [courseId])
+  courseId         String
+  support          Support @relation(fields: [supportSupportId], references: [supportId])
+  supportSupportId Int
+}
