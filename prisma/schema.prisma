@@ -21,6 +21,9 @@ model Student {
   gpa              String?
   cohort           String?
   academicStanding String?
+  createdDate      DateTime       @default(now())
+  updatedDate      DateTime       @updatedAt
+  isDeleted        Boolean        @default(false)
   Grade            Grade[]
   SupportEvent     SupportEvent[]
   Alert            Alert[]
@@ -41,47 +44,62 @@ model Course {
   creditHours       Int
   instructor        Instructor @relation(fields: [instructorId], references: [instructorId])
   instructorId      String
+  createdDate       DateTime   @default(now())
+  updatedDate       DateTime   @updatedAt
+  isDeleted         Boolean    @default(false)
   Grade             Grade[]
   Alert             Alert[]
 }
 
 model Grade {
-  gradeId           Int     @id @default(autoincrement())
+  gradeId           Int      @id @default(autoincrement())
   gradeValue        String
-  student           Student @relation(fields: [ksuId], references: [ksuId])
+  student           Student  @relation(fields: [ksuId], references: [ksuId])
   ksuId             String
-  course            Course  @relation(fields: [courseId], references: [courseId])
+  course            Course   @relation(fields: [courseId], references: [courseId])
   courseId          String
   semesterCode      String
   crn               String
   instructionMethod String
   repeatIndicator   String
+  createdDate       DateTime @default(now())
+  updatedDate       DateTime @updatedAt
+  isDeleted         Boolean  @default(false)
 }
 
 model Support {
   supportId    Int            @id @default(autoincrement())
   unit         String
   type         String
+  createdDate  DateTime       @default(now())
+  updatedDate  DateTime       @updatedAt
+  isDeleted    Boolean        @default(false)
   SupportEvent SupportEvent[]
   Alert        Alert[]
 }
 
 model SupportEvent {
-  eventId   Int      @id @default(autoincrement())
-  support   Support  @relation(fields: [supportId], references: [supportId])
-  supportId Int
-  student   Student  @relation(fields: [ksuId], references: [ksuId])
-  ksuId     String
-  date      DateTime
-  type      String
+  eventId     Int      @id @default(autoincrement())
+  support     Support  @relation(fields: [supportId], references: [supportId])
+  supportId   Int
+  student     Student  @relation(fields: [ksuId], references: [ksuId])
+  ksuId       String
+  date        DateTime
+  type        String
+  createdDate DateTime @default(now())
+  updatedDate DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
 }
 
 model Alert {
-  alertId          Int     @id @default(autoincrement())
-  student          Student @relation(fields: [ksuId], references: [ksuId])
+  alertId          Int      @id @default(autoincrement())
+  student          Student  @relation(fields: [ksuId], references: [ksuId])
   ksuId            String
-  course           Course  @relation(fields: [courseId], references: [courseId])
+  course           Course   @relation(fields: [courseId], references: [courseId])
   courseId         String
-  support          Support @relation(fields: [supportSupportId], references: [supportId])
+  support          Support  @relation(fields: [supportSupportId], references: [supportId])
   supportSupportId Int
+  createdDate      DateTime @default(now())
+  updatedDate      DateTime @updatedAt
+  isDeleted        Boolean  @default(false)
 }

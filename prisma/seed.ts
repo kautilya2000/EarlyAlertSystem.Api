@@ -1,29 +1,29 @@
-import { PrismaClient } from '@prisma/client'
-import students from './students'
+import { PrismaClient } from '@prisma/client';
+import students from './students';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-    for (const student of students) {
-        await prisma.student.create({
-            data: {
-                email: student.email,
-                firstName: student.firstName,
-                lastName: student.lastName,
-                homeDepartment: student.homeDepartment,
-                ksuId: student.id,
-                phoneNumber: student.phoneNumber,
-            },
-        })
-    }
+  for (const student of students) {
+    await prisma.student.create({
+      data: {
+        email: student.email,
+        firstName: student.firstName,
+        lastName: student.lastName,
+        homeDepartment: student.homeDepartment,
+        ksuId: student.id,
+        phoneNumber: student.phoneNumber,
+      },
+    });
+  }
 }
 
 main()
   .then(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
