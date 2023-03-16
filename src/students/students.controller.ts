@@ -37,7 +37,18 @@ export class StudentsController {
   @ApiQuery({ name: 'take', type: 'number', required: false })
   @ApiOkResponse({ type: PagedStudentDto })
   findAll(@Query('skip') skip?: number, @Query('take') take?: number) {
-    return this.studentsService.findAll(skip, take);
+    let skipValue: number | undefined = undefined;
+    let takeValue: number | undefined = undefined;
+
+    if (!isNaN(skip)) {
+      skipValue = Number(skip);
+    }
+
+    if (!isNaN(take)) {
+      takeValue = Number(take);
+    }
+
+    return this.studentsService.findAll(skipValue, takeValue);
   }
 
   @Get(':id')

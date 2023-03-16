@@ -10,6 +10,6 @@ services:
         - 1433:1433
       environment:
         - ACCEPT_EULA=1
-        - SA_PASSWORD=Password123
+        - SA_PASSWORD=Vyshnu@2000
 volumes:
     events_db:
