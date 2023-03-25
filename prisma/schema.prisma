@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL")
+  provider     = "sqlserver"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Student {
@@ -102,4 +103,34 @@ model Alert {
   createdDate      DateTime @default(now())
   updatedDate      DateTime @updatedAt
   isDeleted        Boolean  @default(false)
+}
+
+model RiskStudentDetails {
+  riskStudentDetailsId Int                @id @default(autoincrement())
+  facultyName          String
+  facultyEmail         String
+  courseNumber         String
+  courseCrn            String
+  studentName          String
+  studentId            String
+  studentNetId         String
+  createdDate          DateTime           @default(now())
+  updatedDate          DateTime           @updatedAt
+  isDeleted            Boolean            @default(false)
+  FactorsConcerned     FactorsConcerned[]
+  notes                String
+  isGraduateStudent    Boolean
+  sendEmail            Boolean
+}
+
+model FactorsConcerned {
+  factorsConcernedId   Int                 @id @default(autoincrement())
+  factorConcerned      String
+  createdDate          DateTime            @default(now())
+  updatedDate          DateTime            @updatedAt
+  isDeleted            Boolean             @default(false)
+  riskStudentDetailsId Int?
+  RiskStudentDetails   RiskStudentDetails? @relation(fields: [riskStudentDetailsId], references: [riskStudentDetailsId])
+
+  @@index([riskStudentDetailsId])
 }
