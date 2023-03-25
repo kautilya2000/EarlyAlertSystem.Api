@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: eas-api
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: yarn start:prod
