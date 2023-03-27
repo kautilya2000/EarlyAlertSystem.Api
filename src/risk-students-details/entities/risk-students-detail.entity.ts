@@ -22,10 +22,10 @@ export class RiskStudentsDetailEntity implements RiskStudentDetails {
   studentName: string;
 
   @ApiProperty()
-  studentId: string;
+  studentId: string | null;
 
   @ApiProperty()
-  studentNetId: string;
+  studentNetId: string | null;
 
   @ApiProperty()
   createdDate: Date;
@@ -37,10 +37,13 @@ export class RiskStudentsDetailEntity implements RiskStudentDetails {
   isDeleted: boolean;
 
   @ApiProperty()
-  notes: string;
+  notes: string | null;
 
   @ApiProperty()
   isGraduateStudent: boolean;
+
+  @ApiProperty()
+  graduateProgram: string | null;
 
   @ApiProperty()
   sendEmail: boolean;
