@@ -42,8 +42,10 @@ export class CreateRiskStudentsDetailDto
   })
   graduateProgram: string | null;
 
-  @ApiProperty()
-  sendEmail: boolean;
+  @ApiProperty({
+    required: false,
+  })
+  sendEmail: boolean | null;
 
   @ApiProperty()
   factors: string[];
