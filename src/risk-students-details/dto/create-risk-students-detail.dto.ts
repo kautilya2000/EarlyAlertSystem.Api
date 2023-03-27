@@ -19,23 +19,31 @@ export class CreateRiskStudentsDetailDto
   @ApiProperty()
   studentName: string;
 
-  @ApiProperty()
-  studentId?: string;
+  @ApiProperty({
+    required: false,
+  })
+  studentId: string | null;
 
-  @ApiProperty()
-  studentNetId?: string;
+  @ApiProperty({
+    required: false,
+  })
+  studentNetId: string | null;
 
-  @ApiProperty()
-  notes?: string;
+  @ApiProperty({
+    required: false,
+  })
+  notes: string | null;
 
   @ApiProperty()
   isGraduateStudent: boolean;
 
-  @ApiProperty()
-  graduateProgram?: string;
+  @ApiProperty({
+    required: false,
+  })
+  graduateProgram: string | null;
 
   @ApiProperty()
-  sendEmail?: boolean;
+  sendEmail: boolean;
 
   @ApiProperty()
   factors: string[];
