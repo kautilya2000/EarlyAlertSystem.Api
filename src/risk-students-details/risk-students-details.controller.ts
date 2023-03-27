@@ -28,7 +28,7 @@ export class RiskStudentsDetailsController {
   }
 
   @Get()
-  @ApiOkResponse({ type: [PagedRiskStudentsDetail] })
+  @ApiOkResponse({ type: PagedRiskStudentsDetail })
   findAll() {
     return this.riskStudentsDetailsService.findAll();
   }
