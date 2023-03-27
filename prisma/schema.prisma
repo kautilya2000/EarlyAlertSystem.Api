@@ -112,15 +112,16 @@ model RiskStudentDetails {
   courseNumber         String
   courseCrn            String
   studentName          String
-  studentId            String
-  studentNetId         String
+  studentId            String?
+  studentNetId         String?
   createdDate          DateTime           @default(now())
   updatedDate          DateTime           @updatedAt
   isDeleted            Boolean            @default(false)
   FactorsConcerned     FactorsConcerned[]
-  notes                String
+  notes                String?
   isGraduateStudent    Boolean
-  sendEmail            Boolean
+  graduateProgram      String?
+  sendEmail            Boolean?
 }
 
 model FactorsConcerned {

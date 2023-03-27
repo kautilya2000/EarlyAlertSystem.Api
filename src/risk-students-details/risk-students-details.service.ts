@@ -27,6 +27,7 @@ export class RiskStudentsDetailsService {
         studentId: createRiskStudentsDetailDto.studentId,
         studentName: createRiskStudentsDetailDto.studentName,
         studentNetId: createRiskStudentsDetailDto.studentNetId,
+        graduateProgram: createRiskStudentsDetailDto.graduateProgram,
       },
     });
 
