@@ -45,8 +45,10 @@ export class RiskStudentsDetailEntity implements RiskStudentDetails {
   @ApiProperty()
   graduateProgram: string | null;
 
-  @ApiProperty()
-  sendEmail: boolean;
+  @ApiProperty({
+    required: false,
+  })
+  sendEmail: boolean | null;
 
   @ApiProperty({
     type: [FactorsConcernedEntity],
