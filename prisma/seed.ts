@@ -4,10 +4,15 @@ import { getInstructors } from './instructor';
 import { getCourses } from './courses';
 import { getSupport, getUnits } from './support';
 import { getEvents } from './supportEvent';
+import { getAlerts } from './alerts';
 
 const prisma = new PrismaClient();
 
 async function importDepartments() {
+  if ((await prisma.department.findMany()).length > 0) {
+    console.log('Departments already imported');
+    return;
+  }
   const departments = await getDepartments();
   for (const department of departments) {
     await prisma.department.create({
@@ -20,6 +25,11 @@ async function importDepartments() {
 }
 
 async function importStudents() {
+  await importDepartments();
+  if ((await prisma.student.findMany()).length > 0) {
+    console.log('Students already imported');
+    return;
+  }
   const students = await getStudents();
   for (const student of students) {
     const department = await prisma.department.findMany({
@@ -53,6 +63,10 @@ async function importStudents() {
 }
 
 async function importInstructors() {
+  if ((await prisma.instructor.findMany()).length > 0) {
+    console.log('Instructors already imported');
+    return;
+  }
   const instructors = await getInstructors();
   for (const instructor of instructors) {
     await prisma.instructor.create({
@@ -68,6 +82,10 @@ async function importInstructors() {
 }
 
 async function importCourses() {
+  if ((await prisma.course.findMany()).length > 0) {
+    console.log('Courses already imported');
+    return;
+  }
   const courses = await getCourses();
   for (const course of courses) {
     await prisma.course.create({
@@ -83,6 +101,10 @@ async function importCourses() {
 }
 
 async function importUnits() {
+  if ((await prisma.unit.findMany()).length > 0) {
+    console.log('Units already imported');
+    return;
+  }
   const units = await getUnits();
   for (const unit of units) {
     await prisma.unit.create({
@@ -95,6 +117,10 @@ async function importUnits() {
 }
 
 async function importSupport() {
+  if ((await prisma.support.findMany()).length > 0) {
+    console.log('Support already imported');
+    return;
+  }
   const supports = await getSupport();
   for (const support of supports) {
     const unit = await prisma.unit.findMany({
@@ -123,6 +149,10 @@ async function importSupport() {
 }
 
 async function importSupportEvents() {
+  if ((await prisma.supportEvent.findMany()).length > 0) {
+    console.log('Support Events already imported');
+    return;
+  }
   const events = await getEvents();
   for (const event of events) {
     const support = await prisma.support.findUnique({
@@ -157,14 +187,79 @@ async function importSupportEvents() {
   console.log('Support Events imported');
 }
 
+async function importAlerts() {
+  if ((await prisma.alert.findMany()).length > 0) {
+    console.log('Alerts already imported');
+    return;
+  }
+  const alerts = await getAlerts();
+  for (const alert of alerts) {
+    const student = await prisma.student.findUnique({
+      where: {
+        ksuId: alert.ksuId,
+      },
+    });
+    const course = await prisma.course.findMany({
+      where: {
+        courseNumber: alert.courseID.split('-')[1],
+        courseSubjectCode: alert.courseID.split('-')[0],
+      },
+    });
+
+    const supportIds: number[] = [];
+    for (const supportName of alert.supportNames) {
+      const support = await prisma.support.findMany({
+        where: {
+          supportName: supportName.name,
+        },
+      });
+      if (support.length > 0) {
+        supportIds.push(support[0].id);
+      }
+    }
+
+    if (student && course.length > 0) {
+      const createdAlert = await prisma.alert.create({
+        data: {
+          Course: {
+            connect: {
+              id: course[0].id,
+            },
+          },
+          Student: {
+            connect: {
+              id: student.id,
+            },
+          },
+          createdAt: alert.createdAt,
+          updatedAt: alert.updatedAt === null ? undefined : alert.updatedAt,
+        },
+      });
+      await prisma.alert.update({
+        where: {
+          id: createdAlert.id,
+        },
+        data: {
+          Support: {
+            connect: supportIds.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+    }
+  }
+  console.log('Alerts imported');
+}
+
 async function main() {
-  await importDepartments();
   await importStudents();
   await importInstructors();
   await importCourses();
   await importUnits();
   await importSupport();
   await importSupportEvents();
+  await importAlerts();
 }
 
 main()

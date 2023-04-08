@@ -16,4 +16,4 @@ export const getEvents = async () => {
   });
 };
 
-getEvents().then((events) => console.log(events));
+// getEvents().then((events) => console.log(events));
